@@ -2,11 +2,17 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
+int sensPin = 34;
+
 const char* ssid = "ilfandkym";         //WiFi ssid
 const char* password = "94263770";      //WiFi password
 
-#define mqtt_server "192.168.68.100"    //set MQTT server to IP address
-#define test_topic "test/one"           //set topic of the publishing message
+// Mosquitto config file
+// Admin Powershell-> ipconfig /all for IP address
+// https://www.youtube.com/watch?v=hyJhKWhxAxA for further setup
+
+#define mqtt_server "192.168.68.103"    //set MQTT server to IP address
+#define test_topic "test/light"           //set topic of the publishing message
 
 //construct a WiFiclient that can connect to IP address(done here) or port sepcified by client.connect(IP or URL, Port no.)->returns true/false
 WiFiClient espClient;            
@@ -49,6 +55,7 @@ void setup() {
   //indicate connection of WiFi
   Serial.println("");
   Serial.println("WiFi connected.");
+  pinMode(sensPin, INPUT);
 }
 
 void reconnect() {
@@ -76,7 +83,8 @@ void loop() {
   
   
   client.loop(); //Process incoming messages and maintain connection with MQTT server
-  int data = 1;
+  int data = analogRead(sensPin);
+  Serial.println(data);
   //publish(topic, payload[message], length[optional], messageRetain[optional])
   client.publish(test_topic, String(data).c_str(), true);
   delay(2000);
