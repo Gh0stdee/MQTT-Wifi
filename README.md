@@ -1,1 +1,1 @@
-# MQTT and Wi-fi Learning Repo
+# MQTT Repo
